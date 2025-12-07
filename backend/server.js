@@ -5,6 +5,7 @@ import cors from "cors";
 import "dotenv/config";
 
 import productRoutes from "./routes/product.routes.js"
+import { sql } from "./config/db.js";
 
 
 const app = express();
@@ -21,6 +22,25 @@ app.use(morgan('dev'));
 app.use('/api/products', productRoutes);
 
 
-app.listen(PORT, () => {
-    console.log(`Server is running on: http://localhost:${PORT}`);
-});
+const initDB = async () => {
+    try {
+        await sql`CREATE TABLE IF NOT EXISTS products (
+            id SERIAL PRIMARY KEY,
+            name VARCHAR(255) NOT NULL,
+            image VARCHAR(255) NOT NULL,
+            price DECIMAL(10, 2) NOT NULL,
+            create_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )`;
+
+        console.log('Database initialized successfully');
+    } catch (error) {
+        console.log("Error initDB", error);
+    }
+}
+
+
+initDB().catch(() => {
+    app.listen(PORT, () => {
+        console.log(`Server is running on: http://localhost:${PORT}`);
+    });
+})

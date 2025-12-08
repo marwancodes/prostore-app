@@ -1,17 +1,21 @@
+import Navbar from "./components/Navbar";
+import { Routes, Route } from   "react-router-dom"
+import HomePage from "./pages/HomePage";
+import ProductPage from "./pages/ProductPage";
 
 
 function App() {
 
 
   return (
-    <>
-      <h1 className="text-indigo-500 bg-black">Hello</h1>
-      <button
-        className="inline-block cursor-pointer rounded-md bg-gray-800 px-4 py-3 text-center text-sm font-semibold uppercase text-white transition duration-200 ease-in-out hover:bg-gray-900">
-        Button
-      </button>
-      
-    </>
+    <div className="min-h-screen bg-base-200 transition-colors duration-300">
+      <Navbar />
+
+      <Routes>
+        <Route path="/" element={<HomePage />}/>
+        <Route path="/product/:id" element={<ProductPage />}/>
+      </Routes>
+    </div>
   )
 }
 

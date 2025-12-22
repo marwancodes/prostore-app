@@ -1,6 +1,7 @@
 import { EditIcon, Trash2Icon } from "lucide-react";
 import { Link } from "react-router-dom";
 import type { Product } from "../types/product";
+import { useProductStore } from "../store/useProductStore";
 
 
 type ProductCardProps = {
@@ -9,6 +10,8 @@ type ProductCardProps = {
 
 
 function ProductCard({ product }: ProductCardProps) {
+
+  const { deleteProduct } = useProductStore();
 
   return (
     <div className="transition-shadow duration-300 shadow-xl card bg-base-100 hover:shadow-2xl">
@@ -34,6 +37,7 @@ function ProductCard({ product }: ProductCardProps) {
 
           <button
             className="btn btn-sm btn-error btn-outline"
+            onClick={() => deleteProduct(product.id)}
           >
             <Trash2Icon className="size-4" />
           </button>

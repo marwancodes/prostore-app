@@ -1,6 +1,10 @@
 import { useEffect } from "react";
 import { useProductStore } from "../store/useProductStore";
 import { PlusCircleIcon, RefreshCwIcon } from "lucide-react";
+import ProductCard from "../components/ProductCard";
+import type { Product } from "../types/product";
+
+
 
 const HomePage = () => {
 
@@ -36,16 +40,8 @@ const HomePage = () => {
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {products.map((product: any) => (
-            <div key={product.id} className="p-4 transition-shadow border rounded-lg shadow-sm hover:shadow-md bg-base-100">
-              {/* image */}
-              <img src={product.image} alt={product.name} className="object-cover w-full h-48 mb-4 rounded-lg" />
-              {/* name */}
-              <h2 className="mb-2 text-lg font-semibold">{product.name}</h2>
-              {/* price */}
-              <p className="text-sm text-gray-600">Price: ${product.price}</p>
-
-            </div>
+          {products.map((product: Product) => (
+            <ProductCard key={product.id} product={product} />
           ))}
         </div>)}
 

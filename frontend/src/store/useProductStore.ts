@@ -1,11 +1,12 @@
 import {create} from "zustand";
 import axios, { AxiosError } from "axios";
+import type { Product } from "../types/product";
 
 
 const BASE_URL = "http://localhost:5001";
 
 type ProductStore = {
-    products: unknown[];
+    products: Product[];
     loading: boolean;
     error: null | string;
     fetchProducts: () => Promise<void>;

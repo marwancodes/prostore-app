@@ -12,13 +12,49 @@ type ProductStore = {
     error: null | string;
     fetchProducts: () => Promise<void>;
     deleteProduct: (id: string | number) => Promise<void>;
+    // form state
+    formData: {
+        name: string;
+        price: string;
+        image: string;
+    };
+    setFormData: (formData: { name: string; price: string; image: string }) => void;
+    resetFormData: () => void;
+    addProduct: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
 };
 
 
-export const useProductStore = create<ProductStore>((set) => ({
+export const useProductStore = create<ProductStore>((set, get) => ({
     products: [],
     loading: false,
     error: null,
+
+    // form state
+    formData: {
+        name: "",
+        price: "",
+        image: "",
+    },
+
+    setFormData: (formData) => set({ formData }),
+    resetFormData: () => set({ formData: { name: "", price: "", image: "" } }),
+
+    addProduct: async (e) => {
+        e.preventDefault();
+        set({ loading: true });
+        try {
+            const {formData} = get();
+            await axios.post(`${BASE_URL}/api/products`, formData);
+            await get().fetchProducts();
+            get().resetFormData();
+            toast.success("Product added successfully");
+            //TODO: close modal
+            (document.getElementById("add_product_modal") as HTMLDialogElement).close();
+        } catch (error) {
+            console.error("Failed to add product:", error);
+            toast.error("Failed to add product");
+        }
+    },
 
     fetchProducts: async () => {
         try {

@@ -69,6 +69,6 @@ const HomePage = () => {
 
     </main>
   )
-}
+};
 
 export default HomePage

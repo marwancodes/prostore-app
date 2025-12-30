@@ -4,6 +4,9 @@ import morgan from "morgan";
 import cors from "cors";
 import "dotenv/config";
 
+import path from "path";
+
+
 import productRoutes from "./routes/product.routes.js";
 import { sql } from "./config/db.js";
 import { aj } from "./lib/arcjet.js";
@@ -11,14 +14,18 @@ import { aj } from "./lib/arcjet.js";
 
 const app = express();
 const PORT = process.env.PORT || 5001;
+const __dirname = path.resolve();
 
 
 // Middleware
 app.use(express.json());
 app.use(cors());
-app.use(helmet());
+app.use(helmet({
+    contentSecurityPolicy: false,
+}));
 app.use(morgan('dev'));
 
+// console.log("NODE_ENV:", process.env.NODE_ENV);
 
 const initDB = async () => {
     try {
@@ -70,6 +77,26 @@ app.use(async (req, res, next) => {
 
 // API Routes
 app.use('/api/products', productRoutes);
+
+
+// if (process.env.NODE_ENV === "production") {
+//   // server our react app
+//   app.use(express.static(path.join(__dirname, "/frontend/dist")));
+
+//   app.get("*", (req, res) => {
+//     res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
+//   });
+// }
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "frontend", "dist")));
+
+  // serve React app for any unmatched request without using path-to-regexp
+  app.use((req, res) => {
+    res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
+  });
+}
+
 
 
 app.listen(PORT, () => {

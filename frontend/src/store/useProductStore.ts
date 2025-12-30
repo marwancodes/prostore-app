@@ -3,8 +3,8 @@ import axios, { AxiosError } from "axios";
 import type { Product } from "../types/product";
 import toast from "react-hot-toast";
 
-
-const BASE_URL = "http://localhost:5001";
+// Define a dynamic BASE_URL based on the environment
+const BASE_URL = import.meta.env.MODE === "development" ? "http://localhost:3000" : "";
 
 type ProductStore = {
     products: Product[];
